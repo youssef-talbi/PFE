@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="main-menu">
+      <ul>
+        <li>
+        <a href="{{ url_for('auth.manager_profile', employee_id=session.get('employee_id'))}}">
+          <i class="fa fa-user fa-2x"></i>
+          <span class="nav-text"> Profile </span>
+        </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/manager-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li>
+          <a href="/manager-leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li>
+          <a href="/performance/reviews">
+            <i class="fa fa-chart-line fa-2x"></i>
+            <span class="nav-text">Performance Feedback</span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href="#">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="container">
+        <h1>Provide Feedback</h1>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="reviewId">Review ID</label>
+                <input type="number" class="form-control" id="reviewId" required>
+            </div>
+            <div class="form-group">
+                <label for="feedback">Feedback</label>
+                <textarea class="form-control" id="feedback" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="rating">Rating</label>
+                <input type="number" class="form-control" id="rating" min="1" max="5" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#feedbackForm').submit(function(event) {
+                event.preventDefault();
+                var data = {
+                    feedback: $('#feedback').val(),
+                    rating: $('#rating').val()
+                };
+                var reviewId = $('#reviewId').val();
+                $.ajax({
+                    url: '/performance/reviews/' + reviewId + '/feedback',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        alert(response.message);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

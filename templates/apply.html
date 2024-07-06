@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="area"></div>
+
+    <h1>Available Job Vacancies</h1>
+    
+
+    <div id="jobVacanciesList">
+    {% for vacancy in job_vacancies %}
+        <div class="job-vacancy" id="vacancy-{{ vacancy.id }}">
+            <h2><strong>Title:</strong> {{ vacancy.title }}</h2>
+            <p><strong>Description:</strong> {{ vacancy.description }}</p>
+            <p><strong>Qualifications:</strong> {{ vacancy.qualifications }}</p>
+            <button class="btn btn-info apply-btn" data-vacancy-id="{{ vacancy.id }}">Apply</button>
+            <button class="btn btn-danger details-btn" data-vacancy-id="{{ vacancy.id }}">More Details</button>
+        </div>
+    {% endfor %}
+
+
+<div id="applicationModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Apply for Job</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="applicationForm" enctype="multipart/form-data">
+                        <input type="hidden" id="vacancyId" name="vacancyId">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="resume">Your Resume (PDF/DOC/DOCX)</label>
+                            <input type="file" class="form-control-file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery for modal functionality -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('applicationModal');
+            const applyButtons = document.querySelectorAll('.apply-btn');
+            const applicationForm = document.getElementById('applicationForm');
+            const vacancyIdInput = document.getElementById('vacancyId');
+
+            applyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    vacancyIdInput.value = button.dataset.vacancyId; 
+                    $('#applicationModal').modal('show'); 
+                });
+            });
+
+            applicationForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const formData = new FormData(applicationForm);
+
+                fetch('/apply', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    $('#applicationModal').modal('hide');
+                    applicationForm.reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while submitting the application.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

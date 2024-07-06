@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+        <li>
+    <a href="{{ url_for('auth.hr_profile', employee_id=session.get('employee_id')) }}"> 
+        <i class="fa fa-home fa-2x"></i>
+        <span class="nav-text"> HR Dashboard </span>
+    </a>
+</li> 
+        <li class="has-subnav">
+          <a href="/employees">
+            <i class="fa fa-group fa-2x"></i>
+            <span class="nav-text"> Employees </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/all-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/HR/roles">
+            <i class="fa fa-id-card fa-2x"></i>
+            <span class="nav-text"> Roles </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/benefits">
+            <i class="fa fa-medal fa-2x"></i>
+            <span class="nav-text"> Benefit Programs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/Tprograms">
+            <i class="fa fa-chalkboard-teacher fa-2x"></i>
+            <span class="nav-text"> Trainings </span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/job-vacancies">
+            <i class="fa fa-book fa-2x"></i>
+            <span class="nav-text"> Jobs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/calendar/events">
+            <i class="fa fa-calendar fa-2x" area-hidden ="true"></i>
+            <span class="nav-text"> Calendar </span>
+          </a>
+        </li>
+        <li>
+          <a href="/manager-attendance">
+            <i class="fa fa-clock-o fa-2x"></i>
+            <span class="nav-text"> Attendance </span>
+          </a>
+        </li>
+        <li>
+          <a href="/view/leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+  <a href="#">
+    <i class="fa fa-chart-line fa-2x"></i>
+    <span class="nav-text">Performance</span>
+  </a>
+  <ul class="subnav">
+    <li><a href="/performance/goals">Performance Goals</a></li>
+    <li><a href="/performance/reports">Performance Reports</a></li>
+    <li><a href="/performance/reviews">Performance Review</a></li>
+  </ul>
+</li>
+
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href='/logout'>
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+  <div class="container">
+    <h2>All Employees Attendance Records</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Clock In Time</th>
+          <th>Clock Out Time</th>
+          <th>Day</th>
+
+        </tr>
+      </thead>
+      <tbody>          
+
+        {% for record in attendance_data %}
+          <tr>            
+            <td>{{ record['EmployeeName'] }}</td>
+            <td>{{ record['ClockInTime'] }}</td>
+            <td>{{ record['ClockOutTime'] }}</td>
+            <td>{{ record['Day'] }}</td>
+
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Add Bootstrap CSS for modal -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+        <li>
+        <a href="{{ url_for('auth.manager_profile', employee_id=session.get('employee_id'))}}">
+          <i class="fa fa-user fa-2x"></i>
+          <span class="nav-text"> Profile </span>
+        </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/manager-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li>
+          <a href="/manager-leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li>
+          <a href="/performance/reviews">
+            <i class="fa fa-chart-line fa-2x"></i>
+            <span class="nav-text">Performance Feedback</span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href="#">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    {% if employees %}
+    {% if employees.count %}
+        <h1>{{ employees.DepartmentName }} Department </h1>
+    {% endif %}
+{% endif %}
+<table border="1" id="employeeTableBody">
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Job Title</th>
+        <th>Role</th>
+        <th>Update</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for employee, role in employees %}
+        <tr>
+            <td>{{ employee.EmployeeID }}</td>
+            <td>{{ employee.FirstName }}</td>
+            <td>{{ employee.LastName }}</td>
+            <td>{{ employee.Email }}</td>
+            <td>{{ employee.Phone }}</td>
+            <td>{{ employee.JobTitle }}</td>
+            <td>{{ role.RoleName }}</td>
+            <td>
+                <button class="btn btn-danger update-btn" data-toggle="modal" data-target="#updateEmployeeModal" data-employee-id="{{ employee.EmployeeID }}">Update</button>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+
+</table>
+
+<!-- Update Employee Modal -->
+<div class="modal fade" id="updateEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="updateEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateEmployeeModalLabel">Update Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Update Employee Form -->
+                <form id="updateEmployeeForm">
+                    <div class="form-group">
+                        <label for="updateEmail">Email</label>
+                        <input type="email" class="form-control" id="updateEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="updatePhone">Phone</label>
+                        <input type="tel" class="form-control" id="updatePhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateJobTitle">Job Title</label>
+                        <input type="text" class="form-control" id="updateJobTitle">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+   
+  $(document).ready(function() {
+    $('#employeeTableBody').on('click', '.update-btn', function() {
+        var employeeId = $(this).data('employee-id');
+
+        // Send GET request to fetch employee data and role name
+        $.ajax({
+            url: '/employees/' + employeeId,
+            type: 'GET',
+            success: function(employee) {
+                $('#updateEmployeeModal').modal('show');
+                $('#updateEmail').val(employee.Email);
+                $('#updatePhone').val(employee.Phone);
+                $('#updateJobTitle').val(employee.JobTitle);
+
+                // Handle form submission
+                $('#updateEmployeeForm').submit(function(event) {
+                    event.preventDefault();
+                    var formData = {
+                        'Email': $('#updateEmail').val(),
+                        'Phone': $('#updatePhone').val(),
+                        'JobTitle': $('#updateJobTitle').val()
+                        // Exclude 'RoleName' field for managers
+                    };
+
+                    // Remove empty fields from formData
+                    for (var key in formData) {
+                        if (formData[key] === '') {
+                            delete formData[key];
+                        }
+                    }
+
+                    if (!$.isEmptyObject(formData)) {
+                        $.ajax({
+                            url: '/manage/employees/' + employeeId,
+                            type: 'PUT',
+                            contentType: 'application/json',
+                            data: JSON.stringify(formData),
+                            success: function(response) {
+                                $('#updateEmployeeModal').modal('hide');
+                                location.reload();
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                console.log(xhr.responseText);
+                                alert('Error updating employee data: ' + xhr.responseText);
+                            }
+                        });
+                    } else {
+                        alert('Please fill in at least one field to update.');
+                    }
+                });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log(xhr.responseText);
+                alert('Error fetching employee data: ' + xhr.responseText);
+            }
+        });
+    });
+});
+// Function to handle Update Button click
+    $('#employeeTableBody').on('click', '.update-btn', function() {
+        var employeeId = $(this).data('employee-id');
+
+        $.ajax({
+            url: '/employees/' + employeeId,
+            type: 'GET',
+            success: function(employee) {
+                $('#updateEmployeeModal').modal('show');
+                $('#updateFirstName').val(employee.FirstName);
+                $('#updateLastName').val(employee.LastName);
+                $('#updateEmail').val(employee.Email);
+                $('#updatePhone').val(employee.Phone);
+                $('#updateJobTitle').val(employee.JobTitle);
+                $('#updateRoleName').val(employee.RoleName);
+                $('#updateDepartmentName').val(employee.DepartmentName);
+                $('#updateLeaveBalance').val(employee.LeaveBalance);
+
+                // Handle form submission
+                $('#updateEmployeeForm').submit(function(event) {
+                    event.preventDefault();
+
+                    var formData = new FormData();
+
+                    // Append fields only if they are not empty
+                    
+                    if ($('#updateEmail').val()) formData.append('Email', $('#updateEmail').val());
+                    if ($('#updatePhone').val()) formData.append('Phone', $('#updatePhone').val());
+                    if ($('#updateJobTitle').val()) formData.append('JobTitle', $('#updateJobTitle').val());
+                    
+
+                   
+
+                    $.ajax({
+                        url: '/manage/employees/' + employeeId,
+                        type: 'PUT',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#updateEmployeeModal').modal('hide');
+                            location.reload();
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            alert('Error updating employee data.');
+                        }
+                    });
+                });
+            },
+            error: function(error) {
+                console.log(error);
+                alert('Error fetching employee data.');
+            }
+        });
+    });
+</script>
+</body>
+</html>

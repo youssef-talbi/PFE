@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+x        <li>
+        <a href="{{ url_for('auth.employee_profile', employee_id=session.get('employee_id'))}}">
+          <i class="fa fa-user fa-2x"></i>
+          <span class="nav-text"> Profile </span>
+        </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li>
+          <a href="/leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/view_benefits">
+            <i class="fa fa-medal fa-2x"></i>
+            <span class="nav-text"> Benefit Programs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/view_trainings">
+            <i class="fa fa-chalkboard-teacher fa-2x"></i>
+            <span class="nav-text"> Training Programs </span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/calendar/events">
+            <i class="fa fa-calendar fa-2x" area-hidden ="true"></i>
+            <span class="nav-text"> Calendar </span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href="/logout">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <h1>Department</h1>
+    <table border="3">
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <!-- Add other table headers as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.EmployeeID }}</td>
+                <td>{{ employee.FirstName }} {{ employee.LastName }}</td>
+                <td>{{ employee.Email }}</td>
+                <td>{{ employee.role.RoleName }}</td>
+                <!-- Add other table cells as needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

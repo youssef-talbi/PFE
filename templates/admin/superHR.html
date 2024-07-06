@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+        <li>
+          <a href="hr-dashboard.html">
+            <i class="fa fa-home fa-2x"></i>
+            <span class="nav-text"> HR Dashboard </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/employees">
+            <i class="fa fa-group fa-2x"></i>
+            <span class="nav-text"> Employees </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/all-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/roles">
+            <i class="fa fa-id-card fa-2x"></i>
+            <span class="nav-text"> Roles </span>
+          </a>
+        </li>   
+        
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href="/logout">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="content">
+      <div class="content">
+        <div class="overview">
+          <h2>Employee Overview</h2>
+          <p>Total Employees: 100</p>
+          <p>New Hires: 5</p>
+          <p>Departures: 2</p>
+          <p>HR adminstrators: 5</p>
+          <!-- Additional content such as charts can be added here -->
+        </div>
+        
+        <div class="leave-requests">
+          <h2>Leave Requests</h2>
+          <p>Pending Requests: 3</p>
+          <p>Urgent Requests: 1</p>
+          <!-- Additional content such as a list of leave requests can be added here -->
+        </div>
+        <div class="attendance-status">
+          <h2>Attendance Status</h2>
+          <p>Clocked In: 80</p>
+          <p>On Leave: 10</p>
+          <p>Absent: 5</p>
+          <!-- Additional content such as a calendar view can be added here -->
+        </div>
+        <div class="recent-activity">
+          <h2>Recent Activity</h2>
+          <ul>
+            <li>Employee Onboarding - John Doe (April 15, 2024)</li>
+            <li>Performance Review - Sarah Smith (April 14, 2024)</li>
+            <!-- Additional recent activities can be listed here -->
+          </ul>
+        </div>
+        <div class="upcoming-events">
+          <h2>Upcoming Events</h2>
+          <ul>
+            <li>Performance Reviews (April 20, 2024)</li>
+            <li>Training Session - Diversity & Inclusion (April 25, 2024)</li>
+            <!-- Additional upcoming events can be listed here -->
+          </ul>
+        </div>
+        <div class="announcements-notifications">
+          <h2>Announcements & Notifications</h2>
+          <p>
+            Important announcement: All employees are required to attend the
+            quarterly meeting on April 30, 2024.
+          </p>
+          <!-- Additional announcements and notifications can be added here -->
+        </div>
+        <div class="performance-metrics">
+          <h2>Performance Metrics</h2>
+          <p>Employee Satisfaction Score: 85%</p>
+          <p>Turnover Rate: 10%</p>
+          <!-- Additional performance metrics can be added here -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+x        <li>
+        <a href="{{ url_for('auth.employee_profile', employee_id=session.get('employee_id'))}}">
+          <i class="fa fa-user fa-2x"></i>
+          <span class="nav-text"> Profile </span>
+        </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li>
+          <a href="/leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/view_benefits">
+            <i class="fa fa-medal fa-2x"></i>
+            <span class="nav-text"> Benefit Programs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/view_trainings">
+            <i class="fa fa-chalkboard-teacher fa-2x"></i>
+            <span class="nav-text"> Training Programs </span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/calendar/events">
+            <i class="fa fa-calendar fa-2x" area-hidden ="true"></i>
+            <span class="nav-text"> Calendar </span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href="/logout">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <h1>Leave Requests</h1>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Request ID</th>
+            <th>Employee ID</th>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="leaveRequestsTableBody">
+        {% for leaveRequest in leaveRequests %}
+        <tr>
+            <td>{{ leaveRequest.RequestID }}</td>
+            <td>{{ leaveRequest.EmployeeID }}</td>
+            <td>{{ leaveRequest.LeaveType }}</td>
+            <td>{{ leaveRequest.StartDate }}</td>
+            <td>{{ leaveRequest.EndDate }}</td>
+            <td>{{ leaveRequest.Status }}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Add Button -->
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addLeaveRequestModal">Submit Leave Request</button>
+
+    <!-- Add Leave Request Modal -->
+    <div class="modal fade" id="addLeaveRequestModal" tabindex="-1" role="dialog" aria-labelledby="addLeaveRequestModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLeaveRequestModalLabel">Add Leave Request</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add Leave Request Form -->
+                    <form id="addLeaveRequestForm">
+                        <div class="form-group">
+                            <label for="addLeaveType">Leave Type</label>
+                            <input type="text" class="form-control" id="addLeaveType" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addStartDate">Start Date</label>
+                            <input type="date" class="form-control" id="addStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addEndDate">End Date</label>
+                            <input type="date" class="form-control" id="addEndDate" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Add Button Click -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+      
+    $(document).ready(function() {
+        $('#addLeaveRequestModal').on('shown.bs.modal', function () {
+            $('#addLeaveType').focus();
+        });
+
+        $('#addLeaveRequestForm').submit(function(event) {
+            event.preventDefault();
+            var formData = {
+                'LeaveType': $('#addLeaveType').val(),
+                'StartDate': $('#addStartDate').val(),
+                'EndDate': $('#addEndDate').val()
+            };
+
+            $.ajax({
+                url: '/leave-requests',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    $('#addLeaveRequestModal').modal('hide');
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert('Error adding leave request.');
+                }
+            });
+        });
+    });
+    
+    </script>
+  </body>
+</html>

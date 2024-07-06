@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+        <li>
+          {% if employee %}
+          <a href="/profile/manager/{{employee.id}}">
+          {% else %}
+          <a href="#">
+          {% endif %}
+            <i class="fa fa-user fa-2x"></i>
+            <span class="nav-text"> Profile </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/manager-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="Chat.html">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+          <li>
+          <a href="/manager-attendance">
+            <i class="fa fa-clock-o fa-2x"></i>
+            <span class="nav-text"> Attendance </span>
+          </a>
+        </li>
+        <li>
+          <a href="/manager-leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/benefits">
+            <i class="fa fa-medal fa-2x"></i>
+            <span class="nav-text"> Benefit Programs </span>
+          </a>
+        </li>
+        <li>
+          <a href="Training.html">
+            <i class="fa fa-chalkboard-teacher fa-2x"></i>
+            <span class="nav-text"> Training Programs </span>
+          </a>
+        </li>
+
+        <li>
+          <a href="Jobs.html">
+            <i class="fa fa-book fa-2x"></i>
+            <span class="nav-text"> Jobs </span>
+          </a>
+        </li>
+        <li>
+          <a href="Permissions.html">
+            <i class="fa fa-bullhorn fa-2x"></i>
+            <span class="nav-text"> Company Announcements </span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-chart-line fa-2x"></i>
+            <span class="nav-text">Performance Feedback</span>
+          </a>
+        </li>
+        
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href="#">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  
+  
+  <div class="container">
+    <h2>All Employees Attendance Records</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Clock In Time</th>
+          <th>Clock Out Time</th>
+          <th>Employee Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in attendance_data %}
+          <tr>
+            <td>{{ record['Day'] }}</td>
+            <td>{{ record['ClockInTime'] }}</td>
+            <td>{{ record['ClockOutTime'] }}</td>
+            <td>{{ record['EmployeeName'] }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

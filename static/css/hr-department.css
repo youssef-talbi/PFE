@@ -1,0 +1,293 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa {
+  position: relative;
+  display: table-cell;
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 20px;
+}
+
+.main-menu:hover, nav.main-menu.expanded {
+  width: 250px;
+  overflow: visible;
+}
+
+.main-menu {
+  background: #212121;
+  border-right: 1px solid black;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  width: 60px;
+  overflow: hidden;
+  -webkit-transition: width .05s linear;
+  transition: width .05s linear;
+  z-index: 1000;
+}
+
+.main-menu > ul {
+  margin: 7px 0;
+}
+
+.main-menu li {
+  position: relative;
+  display: block;
+  width: 250px;
+}
+
+.main-menu li > a {
+  position: relative;
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: #999;
+  font-family: Arial;
+  font-size: 14px;
+  text-decoration: none;
+  -webkit-transition: all .1s linear;
+  transition: all .1s linear;
+}
+
+.main-menu .nav-icon {
+  position: relative;
+  display: table-cell;
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 18px;
+}
+
+.main-menu .nav-text {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  width: 190px;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.main-menu > ul.logout {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.no-touch .scrollable.hover {
+  overflow-y: hidden;
+}
+
+.no-touch .scrollable.hover:hover {
+  overflow-y: auto;
+  overflow: visible;
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+}
+
+nav {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+nav ul, nav li {
+  outline: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.main-menu li:hover > a, nav.main-menu li.active > a, .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus, .no-touch .dashboard-page nav.dashboard-menu ul li:hover a, .dashboard-page nav.dashboard-menu ul li.active a {
+  color: #fff;
+  background-color: #000000;
+}
+
+.area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #e2e2e2;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+.content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 30px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  width: 100%;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .table-responsive {
+    width: 100%;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button.btn-primary {
+  margin-bottom: 20px;
+  margin-left: 200px;
+  background-color: #6c63ff;
+  border-color: #6c63ff;
+  color: white;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+  background-color: #5352e8;
+  border-color: #5352e8;
+}
+
+button.btn-danger {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+  color: white;
+}
+
+table {
+  width: 60%;
+  margin: 20px auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #6c63ff;
+  color: #0e0d0d;
+}
+
+.modal-header, .modal-footer {
+  background-color: #2d3e50;
+  color: white;
+}
+
+.modal-content {
+  border-radius: 0;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body .form-group label {
+  font-weight: bold;
+}
+
+.modal-body .form-control {
+  border-radius: 0;
+}
+
+button.close {
+  color: white;
+}
+
+.main-menu ul li.has-subnav {
+  position: relative;
+}
+
+.main-menu .subnav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  min-width: 200px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.main-menu ul li.has-subnav:hover .subnav {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+.main-menu .subnav li {
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.main-menu .subnav li:last-child {
+  border-bottom: none;
+}
+
+.main-menu .subnav a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.main-menu .subnav a:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .table-responsive {
+    width: 100%;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+}

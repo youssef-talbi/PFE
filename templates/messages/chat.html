@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/chat.css') }}">
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Chat Application</title>
+</head>
+<body id="body">
+    <nav class="main-menu">
+      <ul>
+        <li>
+        <a href="/profile/employee/{{ employee.EmployeeID }}">
+          <i class="fa fa-user fa-2x"></i>
+          <span class="nav-text"> Profile </span>
+        </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+       
+        
+
+      <ul class="logout">
+        <li>
+          <a href="/logout">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div id="blur">
+        <div class="chat-page">
+            <div class="row d-flex align-items-stretch">
+                <div class="col-3 col-md-1 workspace-list">
+                    <div class="workspaceList" id="workspaceList">
+                        {% if employee.RoleName.lower() == 'hr administrator' %}
+                            <p>HR Administrator Logged In</p>
+                            {% for department in departments %}
+                                <a href="#" class="workspace-item" data-id="{{ department.DepartmentID }}" onclick="getAndDisplayChannels('{{ department.DepartmentID }}')">
+                                    {{ department.DepartmentName }}
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            
+                            <p class="workspace-item" data-id="{{ employee.DepartmentName }}" onclick="getAndDisplayChannels('{{ employee.DepartmentName }}')">
+                                {{ employee.DepartmentName }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-9 col-md-2 channel-list">
+                    {% if employee.RoleName.lower() == 'hr administrator' %}
+                        <div class="createChannel">
+                            <div class="createChannelButton">
+                                <a href="#" data-toggle="modal" data-target="#createChannelModal"><button id="createChannel"><i class="fas fa-plus"></i> Create Channel</button></a>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endif %}
+                    <div class="channelList" id="channelList">
+                        <!-- Channels will be dynamically loaded here -->
+                    </div>
+                </div>
+                <div class="col-md-7 chat-section" id="chatSection">
+                    <div class="main-block">
+                        <div class="channel-heading">
+                            <p class="chat-workspace-name" id="chat-workspace-name">Start Collaborating today!</p>
+                        </div>
+                        <div class="chats d-flex flex-column" id="chats">
+                            <input type="hidden" id="employeeIdInput" value="{{ employee.EmployeeID }}">
+                            <input type="hidden" id="isAdminInput" value="{{ 'true' if employee.RoleName.lower() == 'hr administrator' else 'false' }}">
+                            <input type="hidden" id="employeeRoleInput" value="{{ employee.RoleName }}">
+                        </div>
+                        <div class="send-message-container">
+                            <form id="sendMessageForm">
+                                <input type="hidden" id="channelIdInput" value="initialChannelId">
+                                <input id="chatMessageInput" class="message-input" type="text" placeholder="Type a message..." required>
+                                <button type="submit" id="send-message" class="send-message chat-buttons">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 profile-section">
+                    <!-- Profile section content here -->
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="createChannelModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Teamwork makes the dream work.</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createChannelForm">
+                            <input type="text" placeholder="Channel Name" id="channelNameInput" required>
+                            <select id="departmentSelect" required>
+                                {% for department in departments %}
+                                    <option value="{{ department.DepartmentID }}">{{ department.DepartmentName }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-primary" id="createChannelButton" type="submit">Create Channel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.1/socket.io.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    </div>
+</body>
+</html>

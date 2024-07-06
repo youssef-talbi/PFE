@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="main-menu">
+      <ul>
+        <li>
+    <a href="{{ url_for('auth.hr_profile', employee_id=session.get('employee_id')) }}"> 
+        <i class="fa fa-home fa-2x"></i>
+        <span class="nav-text"> HR Dashboard </span>
+    </a>
+</li> 
+        <li class="has-subnav">
+          <a href="/employees">
+            <i class="fa fa-group fa-2x"></i>
+            <span class="nav-text"> Employees </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/all-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/HR/roles">
+            <i class="fa fa-id-card fa-2x"></i>
+            <span class="nav-text"> Roles </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/benefits">
+            <i class="fa fa-medal fa-2x"></i>
+            <span class="nav-text"> Benefit Programs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/Tprograms">
+            <i class="fa fa-chalkboard-teacher fa-2x"></i>
+            <span class="nav-text"> Trainings </span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/job-vacancies">
+            <i class="fa fa-book fa-2x"></i>
+            <span class="nav-text"> Jobs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/calendar/events">
+            <i class="fa fa-calendar fa-2x" area-hidden ="true"></i>
+            <span class="nav-text"> Calendar </span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/manager-attendance">
+            <i class="fa fa-clock-o fa-2x"></i>
+            <span class="nav-text"> Attendance </span>
+          </a>
+        </li>
+        <li>
+          <a href="/view/leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+  <a href="#">
+    <i class="fa fa-chart-line fa-2x"></i>
+    <span class="nav-text">Performance</span>
+  </a>
+  <ul class="subnav">
+    <li><a href="/performance/goals">Performance Goals</a></li>
+    <li><a href="/performance/reports">Performance Reports</a></li>
+    <li><a href="/performance/reviews">Performance Review</a></li>
+  </ul>
+</li>
+
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href='/logout'>
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="container">
+        <h1>Set Performance Goals</h1>
+        <ul class="nav nav-tabs" id="goalTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="employee-tab" data-toggle="tab" href="#employee" role="tab" aria-controls="employee" aria-selected="true">Employee</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="department-tab" data-toggle="tab" href="#department" role="tab" aria-controls="department" aria-selected="false">Department</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="goalTabContent">
+            <div class="tab-pane fade show active" id="employee" role="tabpanel" aria-labelledby="employee-tab">
+                <form id="performanceGoalForm">
+                    <div class="form-group">
+                        <label for="title">Goal Title</label>
+                        <input type="text" class="form-control" id="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control" id="description" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kpi">Key Performance Indicator (KPI)</label>
+                        <input type="text" class="form-control" id="kpi" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="target_date">Target Date</label>
+                        <input type="date" class="form-control" id="target_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeId">Assign to Employee</label>
+                        <select class="form-control" id="employeeId">
+                            {% for employee in employees %}
+                                <option value="{{ employee.EmployeeID }}">{{ employee.FirstName }} {{ employee.LastName }} ({{ employee.DepartmentName }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Set Goal</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="department" role="tabpanel" aria-labelledby="department-tab">
+                <form id="departmentGoalForm">
+                    <div class="form-group">
+                        <label for="titleDept">Goal Title</label>
+                        <input type="text" class="form-control" id="titleDept" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descriptionDept">Description</label>
+                        <input type="text" class="form-control" id="descriptionDept" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kpiDept">Key Performance Indicator (KPI)</label>
+                        <input type="text" class="form-control" id="kpiDept" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="target_dateDept">Target Date</label>
+                        <input type="date" class="form-control" id="target_dateDept" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="departmentId">Assign to Department</label>
+                        <select class="form-control" id="departmentId">
+                            {% for department in departments %}
+                                <option value="{{ department.DepartmentID }}">{{ department.DepartmentName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Set Goal</button>
+                </form>
+            </div>
+        </div>
+
+        <h2>Performance Goals</h2>
+        <table class="table table-striped" id="performanceGoalsTable">
+            <thead>
+                <tr>
+                    <th>Goal Title</th>
+                    <th>Description</th>
+                    <th>KPI</th>
+                    <th>Target Date</th>
+                    <th>Employee/Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Performance goals will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+    // Fetch employees and populate the select dropdown
+    $.get('/employees', function(data) {
+        var employeeSelect = $('#employeeId');
+        data.forEach(function(employee) {
+            employeeSelect.append($('<option>', {
+                value: employee.id,
+                text: employee.name
+            }));
+        });
+    });
+
+    // Fetch departments and populate the select dropdown
+    $.get('/departments', function(data) {
+        var departmentSelect = $('#departmentId');
+        data.forEach(function(department) {
+            departmentSelect.append($('<option>', {
+                value: department.DepartmentID,
+                text: department.DepartmentName
+            }));
+        });
+    });
+
+    // Submit form to set a new performance goal for employee
+    $('#performanceGoalForm').submit(function(event) {
+        event.preventDefault();
+        var data = {
+            title: $('#title').val(),
+            description: $('#description').val(),
+            kpi: $('#kpi').val(),
+            target_date: $('#target_date').val(),
+            employee_id: $('#employeeId').val()
+        };
+        $.ajax({
+            url: '/performance/goals',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                alert(response.message);
+                fetchPerformanceGoals(); // Refresh the goals table
+            }
+        });
+    });
+
+    // Submit form to set a new performance goal for department
+$('#departmentGoalForm').submit(function(event) {
+    event.preventDefault();
+    var data = {
+        title: $('#titleDept').val(),
+        description: $('#descriptionDept').val(),
+        kpi: $('#kpiDept').val(),
+        target_date: $('#target_dateDept').val(),
+        department_id: $('#departmentId').val()
+    };
+    $.ajax({
+        url: '/performance/goals/department',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(response) {
+            alert(response.message);
+            fetchPerformanceGoals(); // Refresh the goals table
+        }
+    });
+});
+
+
+    // Fetch and display performance goals
+function fetchPerformanceGoals() {
+    $.get('/performance/goals/all', function(data) {
+        var goalsTableBody = $('#performanceGoalsTable tbody');
+        goalsTableBody.empty(); // Clear existing rows
+        data.forEach(function(goal) {
+            var row = $('<tr>');
+            row.append($('<td>').text(goal.title));
+            row.append($('<td>').text(goal.description));
+            row.append($('<td>').text(goal.kpi));
+            row.append($('<td>').text(goal.target_date));
+            row.append($('<td>').text(goal.employee_name_department)); // employee name and department
+            goalsTableBody.append(row);
+        });
+    });
+}
+
+
+    // Initial fetch of performance goals
+    fetchPerformanceGoals();
+});
+
+    </script>
+</body>
+</html>

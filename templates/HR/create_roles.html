@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/role.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="area"></div><nav class="main-menu">
+      <ul>
+        <li>
+    <a href="{{ url_for('auth.hr_profile', employee_id=session.get('employee_id')) }}"> 
+        <i class="fa fa-home fa-2x"></i>
+        <span class="nav-text"> HR Dashboard </span>
+    </a>
+</li> 
+        <li class="has-subnav">
+          <a href="/employees">
+            <i class="fa fa-group fa-2x"></i>
+            <span class="nav-text"> Employees </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/all-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/HR/roles">
+            <i class="fa fa-id-card fa-2x"></i>
+            <span class="nav-text"> Roles </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/benefits">
+            <i class="fa fa-medal fa-2x"></i>
+            <span class="nav-text"> Benefit Programs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/Tprograms">
+            <i class="fa fa-chalkboard-teacher fa-2x"></i>
+            <span class="nav-text"> Trainings </span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/job-vacancies">
+            <i class="fa fa-book fa-2x"></i>
+            <span class="nav-text"> Jobs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/calendar/events">
+            <i class="fa fa-calendar fa-2x" area-hidden ="true"></i>
+            <span class="nav-text"> Calendar </span>
+          </a>
+        </li>
+        
+        </li>
+        <li>
+          <a href="/manager-attendance">
+            <i class="fa fa-clock-o fa-2x"></i>
+            <span class="nav-text"> Attendance </span>
+          </a>
+        </li>
+        <li>
+          <a href="/view/leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+  <a href="#">
+    <i class="fa fa-chart-line fa-2x"></i>
+    <span class="nav-text">Performance</span>
+  </a>
+  <ul class="subnav">
+    <li><a href="/performance/goals">Performance Goals</a></li>
+    <li><a href="/performance/reports">Performance Reports</a></li>
+    <li><a href="/performance/reviews">Performance Review</a></li>
+  </ul>
+</li>
+
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href='/logout'>
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="content">
+    <h1>Roles</h1>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal">
+        + Add Role
+    </button>    
+
+    <!-- Display existing roles -->
+    <h2>Existing Roles</h2>
+    <table class="roles-list">
+      <thead>
+        <tr>
+            <th>Role ID</th>
+          <th>Role Name</th>
+          <th>Description</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody id="rolesTableBody">
+        {% for role in roles %}
+        <tr>
+          <td>{{ role.RoleID }}</td>
+          <td>{{ role.RoleName }}</td>
+          <td>{{ role.Description }}</td>
+            <td>
+                <button class="btn btn-danger delete-btn" data-role-name="{{ role.RoleName }}">Delete</button>
+            </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Error or success messages -->
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if message %}
+    <p class="message">{{ message }}</p>
+    {% endif %}
+  
+  <!-- Add Rolee Modal -->
+    <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRoleModalLabel">Add Role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add Rolee Form -->
+                    <form id="addRoleForm">
+                        <div>
+                    <label for="role-id">Role ID:</label>
+                    <input type="text" class="form-control" id="role-id" name="RoleID" required>
+                    </div>
+                    <div>
+                    <label for="role-name">Role Name:</label>
+                    <input type="text" class="form-control" id="role-name" name="RoleName" required>
+                    </div>
+                    <div>
+                    <label for="description">Description:</label>
+                    <textarea id="description" class="form-control" name="Description"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- Add Bootstrap JS for modal functionality -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    <!-- Add Bootstrap JS and jQuery for modal functionality -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+    $('#addRoleForm').submit(function(event) {
+        event.preventDefault();
+
+        // Get form data
+        var formData = [{
+            'RoleID': $('#role-id').val(),
+            'RoleName': $('#role-name').val(),
+            'Description': $('#description').val()
+        }];
+
+        // Send POST request
+        $.ajax({
+            url: '/roles',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function() {
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = 'Error: ' + error;
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errMsg += ' - ' + xhr.responseJSON.error;
+                }
+                alert(errMsg);
+            }
+        });
+    });
+});
+
+$('#rolesTableBody').on('click', '.delete-btn', function() {
+    var roleName = $(this).data('role-name'); // Change to 'role-id'
+    
+    if (confirm('Are you sure you want to delete this role?')) {
+        $.ajax({
+            url: '/roles/' + roleName, // Update URL to use roleName
+            type: 'DELETE',
+            success: function() {
+                alert('Role deleted successfully!');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                alert('Error: ' + error);
+            }
+        });
+    }
+});
+
+
+
+
+    </script>
+</body>
+</html>

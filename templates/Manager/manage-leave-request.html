@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Add Bootstrap CSS for modal -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+        <li>
+        <a href="{{ url_for('auth.manager_profile', employee_id=session.get('employee_id'))}}">
+          <i class="fa fa-user fa-2x"></i>
+          <span class="nav-text"> Profile </span>
+        </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/manager-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li>
+          <a href="/manager-leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li>
+          <a href="/performance/reviews">
+            <i class="fa fa-chart-line fa-2x"></i>
+            <span class="nav-text">Performance Feedback</span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href="#">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+<div class="content">
+        <h1>Manager Leave Requests</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for leave_request in leave_requests %}
+            <tr>
+                <td>{{ leave_request.RequestID }}</td>
+                <td>{{ leave_request.EmployeeID }}</td>
+                <td>{{ leave_request.employee.FirstName}} {{ leave_request.employee.LastName}}</td>
+                <td>{{ leave_request.LeaveType }}</td>
+                <td>{{ leave_request.StartDate }}</td>
+                <td>{{ leave_request.EndDate }}</td>
+                <td>{{ leave_request.Status }}</td>
+                <td>
+                    <form action="{{ url_for('leaverequest_routes.display_department_leave_requests') }}" method="POST">
+                        <input type="hidden" name="leave_request_id" value="{{ leave_request.RequestID }}">
+                        {% if leave_request.Status in ['approved', 'denied'] %}
+                            <button type="button" disabled>Approve</button>
+                            <button type="button" disabled>Deny</button>
+                        {% else %}
+                            <button type="submit" name="action" value="approve">Approve</button>
+                            <button type="submit" name="action" value="deny">Deny</button>
+                        {% endif %}
+                    </form>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

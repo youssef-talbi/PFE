@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="/static/css/hr-dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+     <!-- Add Bootstrap CSS for modal -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="area"></div>
+    <nav class="main-menu">
+      <ul>
+        <li>
+    <a href="{{ url_for('auth.hr_profile', employee_id=session.get('employee_id')) }}"> 
+        <i class="fa fa-home fa-2x"></i>
+        <span class="nav-text"> HR Dashboard </span>
+    </a>
+</li> 
+        <li class="has-subnav">
+          <a href="/employees">
+            <i class="fa fa-group fa-2x"></i>
+            <span class="nav-text"> Employees </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/all-departments">
+            <i class="fa fa-building"></i>
+            <span class="nav-text"> Departments </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/HR/roles">
+            <i class="fa fa-id-card fa-2x"></i>
+            <span class="nav-text"> Roles </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/chat">
+            <i class="fa fa-comments fa-2x"></i>
+            <span class="nav-text"> Group Hub Forums </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+          <a href="/benefits">
+            <i class="fa fa-medal fa-2x"></i>
+            <span class="nav-text"> Benefit Programs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/Tprograms">
+            <i class="fa fa-chalkboard-teacher fa-2x"></i>
+            <span class="nav-text"> Trainings </span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/job-vacancies">
+            <i class="fa fa-book fa-2x"></i>
+            <span class="nav-text"> Jobs </span>
+          </a>
+        </li>
+        <li>
+          <a href="/calendar/events">
+            <i class="fa fa-calendar fa-2x" area-hidden ="true"></i>
+            <span class="nav-text"> Calendar </span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/manager-attendance">
+            <i class="fa fa-clock-o fa-2x"></i>
+            <span class="nav-text"> Attendance </span>
+          </a>
+        </li>
+        <li>
+          <a href="/view/leave-requests">
+            <i class="fa fa-door-open fa-2x"></i>
+            <span class="nav-text"> Leave Requests </span>
+          </a>
+        </li>
+        <li class="has-subnav">
+  <a href="#">
+    <i class="fa fa-chart-line fa-2x"></i>
+    <span class="nav-text">Performance</span>
+  </a>
+  <ul class="subnav">
+    <li><a href="/performance/goals">Performance Goals</a></li>
+    <li><a href="/performance/reports">Performance Reports</a></li>
+    <li><a href="/performance/reviews">Performance Review</a></li>
+  </ul>
+</li>
+
+      </ul>
+
+      <ul class="logout">
+        <li>
+          <a href='/logout'>
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text"> Logout </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <h1>Add Job Vacancies</h1>
+    <button class="btn btn-primary add-btn" data-toggle="modal" data-target="#addJobVacancyModal">Add Job</button>
+
+    <div id="jobVacanciesList">
+        {% for vacancy in job_vacancies %}
+        <div class="job-vacancy" id="vacancy-{{ vacancy.id }}">
+            <h2><strong>Title:</strong> {{ vacancy.title }}</h2>
+            <p><strong>Description:</strong> {{ vacancy.description }}</p>
+            <p><strong>Qualifications:</strong> {{ vacancy.qualifications }}</p>
+            <button class="btn btn-info update-btn" data-vacancy-id="{{ vacancy.id }}">Update</button>
+            <button class="btn btn-danger delete-btn" data-vacancy-id="{{ vacancy.id }}">Delete</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add Job Vacancy Modal -->
+    <div class="modal fade" id="addJobVacancyModal" tabindex="-1" role="dialog" aria-labelledby="addJobVacancyModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addJobVacancyModalLabel">Add Job Vacancy</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addJobVacancyForm">
+                        <div class="form-group">
+                            <label for="addTitle">Title</label>
+                            <input type="text" class="form-control" id="addTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addDescription">Description</label>
+                            <textarea class="form-control" id="addDescription" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="addQualifications">Qualifications</label>
+                            <textarea class="form-control" id="addQualifications" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Job Vacancy Modal -->
+    <div class="modal fade" id="updateJobVacancyModal" tabindex="-1" role="dialog" aria-labelledby="updateJobVacancyModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateJobVacancyModalLabel">Update Job Vacancy</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateJobVacancyForm">
+                        <input type="hidden" id="updateVacancyId">
+                        <div class="form-group">
+                            <label for="updateTitle">Title</label>
+                            <input type="text" class="form-control" id="updateTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateDescription">Description</label>
+                            <textarea class="form-control" id="updateDescription" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateQualifications">Qualifications</label>
+                            <textarea class="form-control" id="updateQualifications" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Bootstrap JS and jQuery for modal functionality -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    // Handle form submission for adding a new job vacancy
+    $('#addJobVacancyForm').submit(function(event) {
+        event.preventDefault();
+
+        // Get form data
+        var formData = {
+            'title': $('#addTitle').val(),
+            'description': $('#addDescription').val(),
+            'qualifications': $('#addQualifications').val()
+        };
+
+        // Send POST request to add a new job vacancy
+        $.ajax({
+            url: '/job-vacancies',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                // Handle success
+                console.log(response);
+                // Close the modal
+                $('#addJobVacancyModal').modal('hide');
+                // Reload the page to update the job vacancies list
+                location.reload();
+            },
+            error: function(error) {
+                // Handle error
+                console.error('Error adding job vacancy:', error);
+            }
+        });
+    });
+
+    // Handle form submission for updating an existing job vacancy
+    $('#updateJobVacancyForm').submit(function(event) {
+        event.preventDefault();
+
+        // Get form data
+        var formData = {
+            'title': $('#updateTitle').val(),
+            'description': $('#updateDescription').val(),
+            'qualifications': $('#updateQualifications').val()
+        };
+
+        var vacancyId = $('#updateVacancyId').val();
+
+        // Send PUT request to update the job vacancy
+        $.ajax({
+            url: '/job-vacancies/' + vacancyId,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                // Handle success
+                console.log(response);
+                // Close the modal
+                $('#updateJobVacancyModal').modal('hide');
+                // Reload the page to update the job vacancies list
+                location.reload();
+            },
+            error: function(error) {
+                // Handle error
+                console.error('Error updating job vacancy:', error);
+            }
+        });
+    });
+
+    // Handle click on delete button for a job vacancy
+    $('#jobVacanciesList').on('click', '.delete-btn', function() {
+        var vacancyId = $(this).data('vacancy-id');
+
+        // Confirm deletion
+        if (confirm('Are you sure you want to delete this job vacancy?')) {
+            // Send DELETE request to delete the job vacancy
+            $.ajax({
+                url: '/job-vacancies/' + vacancyId,
+                type: 'DELETE',
+                success: function(response) {
+                    // Handle success
+                    console.log(response);
+                    // Reload the page to update the job vacancies list
+                    location.reload();
+                },
+                error: function(error) {
+                    // Handle error
+                    console.error('Error deleting job vacancy:', error);
+                }
+            });
+        }
+    });
+
+    // Handle click on update button for a job vacancy
+    $('#jobVacanciesList').on('click', '.update-btn', function() {
+        var vacancyId = $(this).data('vacancy-id');
+
+        // Send GET request to fetch job vacancy data
+        $.ajax({
+            url: '/job-vacancies/' + vacancyId,
+            type: 'GET',
+            success: function(vacancy) {
+                // Populate update form with job vacancy data
+                $('#updateVacancyId').val(vacancy.id);
+                $('#updateTitle').val(vacancy.title);
+                $('#updateDescription').val(vacancy.description);
+                $('#updateQualifications').val(vacancy.qualifications);
+                $('#updateJobVacancyModal').modal('show');
+            },
+            error: function(error) {
+                // Handle error
+                console.error('Error fetching job vacancy data:', error);
+            }
+        });
+    });
+
+    // Initial load of job vacancies
+    function loadJobVacancies() {
+        $.ajax({
+            url: '/job-vacancies',
+            type: 'GET',
+            dataType: 'json',
+            success: function(jobVacancies) {
+                $('#jobVacanciesList').empty();
+                jobVacancies.forEach(function(vacancy) {
+                    var vacancyHtml = '<div class="job-vacancy" id="vacancy-' + vacancy.id + '">';
+                    vacancyHtml += '<h2><strong>Title:</strong> ' + vacancy.title + '</h2>';
+                    vacancyHtml += '<p><strong>Description:</strong> ' + vacancy.description + '</p>';
+                    vacancyHtml += '<p><strong>Qualifications:</strong> ' + vacancy.qualifications + '</p>';
+                    vacancyHtml += '<button class="btn btn-info update-btn" data-vacancy-id="' + vacancy.id + '">Update</button>';
+                    vacancyHtml += '<button class="btn btn-danger delete-btn" data-vacancy-id="' + vacancy.id + '">Delete</button>';
+                    vacancyHtml += '</div>';
+                    $('#jobVacanciesList').append(vacancyHtml);
+                });
+            },
+            error: function(error) {
+                console.error('Error loading job vacancies:', error);
+            }
+        });
+    }
+
+    loadJobVacancies();
+});
+
+  </script>
+  
